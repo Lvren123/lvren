@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>美多商城后台管理</title>
+	<link rel="stylesheet" type="text/css" href="../../static/admin/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="../../static/admin/css/main.css">
+	<script type="text/javascript" src="../../static/admin/js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+	<div class="header">
+		<a href="#" class="logo fl"><img src="../../static/admin/images/logo.png" alt="logo"></a>
+		<a href="/sadmin/login/" onclick="logout()" class="logout fr">退 出</a>
+	</div>
+	
+	<div class="side_bar">
+		<div class="user_info">
+                <img src="../../static/admin/images/person.png" alt="张大山">
+			<p>欢迎你 <em>{{ admin.username }}</em></p>
+		</div>
+
+		<div class="menu_con">
+			<div class="first_menu"><a href="#" class="icon02">产品管理</a></div>
+			<ul class="sub_menu">
+{#				<li><a href="/sadmin/addc" class="icon031" target="main_frame">产品审核</a></li>#}
+				<!--<li><a href="../../static/admin/html/news_edit.html" class="icon032" target="main_frame">新闻版式编辑</a></li>-->
+				<li><a href="/sadmin/showcate/" class="icon034" target="main_frame">分类管理</a></li>
+                <li class="current"><a href="/sadmin/ban/" class="icon021" target="main_frame">焦点图列表</a></li>
+                <li class="current"><a href="/sadmin/snew/" class="icon034" target="main_frame">新闻列表</a></li>
+                <li class="current"><a href="/sadmin/tags/" class="icon022" target="main_frame">标签列表</a></li>
+                <li class="current"><a href="/sadmin/shop/" class="icon033" target="main_frame">商品列表</a></li>
+
+            </ul>
+            		<div class="first_menu"><a href="#" class="icon02">权限管理</a></div>
+			<ul class="sub_menu">
+{#				<li><a href="/sadmin/addc" class="icon031" target="main_frame">产品审核</a></li>#}
+				<!--<li><a href="../../static/admin/html/news_edit.html" class="icon032" target="main_frame">新闻版式编辑</a></li>-->
+                <li class="current"><a href="/sadmin/auser/" class="icon022" target="main_frame">用户管理</a></li>
+                <li class="current"><a href="/sadmin/re/" class="icon033" target="main_frame">资源管理</a></li>
+               <li class="current"><a href="/sadmin/role/" class="icon021" target="main_frame">角色管理</a></li>
+
+            </ul>
+
+
+
+        </div>
+
+        </div>
+	</div>
+
+
+
+
+
+	<div class="main_body" id="main_body">
+		<iframe src="/sadmin/login/" frameborder="0" id="main_frame" name="main_frame" frameborder="0" scrolling="auto"></iframe>
+	</div>
+
+	<script>
+
+		$(function(){
+			$('.first_menu').click(function(){
+				$(this).addClass('active').siblings('.first_menu').removeClass('active');
+				$(this).next().slideDown().siblings('.sub_menu').slideUp();
+			})
+			var frame_w = $('#main_body').outerWidth();
+			var frame_h = $('#main_body').outerHeight();
+			$('#main_frame').css({'width':frame_w,'height':frame_h});
+		})
+        websocket_conn()
+        function websocket_conn() {
+		    var name = "{{ admin.username }}"
+        var socket = new WebSocket("ws://127.0.0.1:8000/finish_order/"+name)
+        socket.onopen = function (params) {
+            alert('连接成功！')  // 连接成功
+        };
+        socket.onmessage = function (params) {
+            alert('消息提醒：'+params.data)  // 返回数据
+        };
+        socket.onclose = function name(params) {
+           {#alert(e);#}
+            alert('关闭连接')
+           {#socket.close(); // 关闭TCP连接#}
+        }
+    }
+	</script>
+
+</body>
+</html>

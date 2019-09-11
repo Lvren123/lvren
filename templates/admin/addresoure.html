@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>资源后台管理</title>
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/main.css">
+    <script type="text/javascript" src="../../static/admin/js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+    <div class="breadcrub">
+            当前位置：用户管理>添加资源
+        </div>
+        <div class="pannel">
+            <div class="news_review">
+
+            <h3 class="review_title">添加资源</h3>
+                <form enctype="multipart/form-data">
+            <div class="form_group">
+                <label>名称：</label>
+                <input type="text" name="name" class="input_txt2" value="{{ re.name }}" width=100>
+            </div>
+                 <div class="form_group">
+                <label>地址：</label>
+                <input type="text" name="url" class="input_txt2" value="{{ re.url }}" width=100>
+            </div>
+             <div class="form_group">
+                <label>是否启用：</label>
+                <input type="radio" name="status"  value=1 width=100 checked>启用
+                <input type="radio" name="status" value=0 width=100>停用
+            </div>
+                    <input type="text"  name="id" value="{{ id }}">
+            <div class="form_group indent_group line_top">
+                <input type="button" value="确定" class="confirm" onclick='addcate()'>
+                <input type="button" value="取消" class="cancel" onclick="cancel()">
+            </div>
+            </form>
+        </div>
+        </div>
+
+
+</body>
+<script>
+function addcate(){
+        $.ajax({
+            url:'/sadmin/addre/',
+            type:'post',
+            data:$('form').serialize(),
+            dataType:'json',
+            success:function(res){
+                if(res.code == 200){
+                    window.location.href="/sadmin/re/"
+                }else{
+                    alert('添加失败')
+                }
+            }
+        })
+}
+</script>
+</html>

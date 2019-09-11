@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品后台管理</title>
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/main.css">
+    <script type="text/javascript" src="../../static/admin/js/jquery-1.12.4.min.js"></script>
+     <script src="/static/admin/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script src="/static/admin/js/tinymce_setup.js"></script>
+</head>
+<body>
+    <div class="breadcrub">
+            当前位置：商品管理>添加商品
+        </div>
+        <div class="pannel">
+            <div class="news_review">
+
+            <h3 class="review_title">添加商品</h3>
+                <form id="form5" enctype="multipart/form-data">
+            <div  class="form_group">
+                <label>商品名称：</label>
+                <input type="text"  name="name" value="{{ good.name }}" width=100>
+            </div>
+                    <div class="form_group">
+                <label>商品简介：</label>
+                <input type="text" name="descrip" class="input_txt2" value="{{ good.descrip }}" width=100>
+            </div>
+                    <div class="form_group">
+                <label>商品价格：</label>
+                <input type="text"  name="price" value="{{ good.price }}" width=100 >
+            </div>
+                     <div class="form_group">
+                <label>商品图片：</label>
+                <input type="file" name="pic" width=100 >
+            </div>
+                    <div class="form_group">
+                <label>商品库存：</label>
+                <input type="text" value="{{ good.store }}" name="store">
+            </div>
+                    <div class="form_group">
+                <label>是否推送：</label>
+                <input type="radio" name="is_recommend" value=1 checked>是
+                <input type=radio name="is_recommend" value=0>否
+            </div>
+                    <div class="form_group">
+                <label>分类：</label>
+                        <select name="cid" id="fenlei">
+                            <option value="">--请选择--</option>
+                            {% for c in cate %}
+                                <option value="{{ c.id  }}">{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+            </div>
+                    <div class="form_group">
+                <label>标签：</label>
+                        <select name="tagid" id="biaoqian">
+                        <option value="">--请选择--</option>
+                            {% for t in tags %}
+                            <option  value="{{ t.id }}">{{ t.name }}</option>
+                            {% endfor %}
+                        </select>
+            </div>
+                        <div class="form_group">
+                <label>商品详情：</label>
+                <input type="text" value="" name="content" id="rich_content">
+            </div>
+                    <input type="text" name="id" value="{{ id }}">
+            <div class="form_group indent_group line_top">
+                <input type="button" value="确定" class="confirm" onclick='addcate()'>
+                <input type="button" value="取消" class="cancel" onclick="cancel()">
+            </div>
+                </form>
+        </div>
+        </div>
+
+
+</body>
+<script>
+function addcate(){
+    var content = tinyMCE.activeEditor.getContent();
+    var data = new FormData($('#form5')[0])
+    data.append('content',content)
+    $.ajax({
+
+        url:'/sadmin/addshop/',
+        type:'post',
+        cache:false,
+        data:data,
+        processData:false,
+        contentType:false,
+        dataType:'json',
+
+        success:function (res) {
+            if (res.code == 200){
+                window.location.href = '/sadmin/shop/'
+            }else {
+                alert('添加失败，请重试！')
+            }
+        }
+    })
+}
+
+    $('#fenlei').change(function () {
+       // 获取分类ID
+       var id1 = $('#fenlei option:selected').val()  //没换之前的ID
+        // 清空值
+        $('#biaoqian').empty()
+        $.ajax({
+            url:'/sadmin/ceshi/',
+            type:'get',
+            data:'id1='+id1,
+            success:function (res) {
+                if (res.code == 200){
+                    for (var i=0;i<res.message.length;i++){
+                        $('#biaoqian').append("<option value='" + res.message[i].id + "'>" + res.message[i].name + "</option>")
+
+                    }
+                }else {
+                    alert('错wwwww')
+                }
+            }
+
+        })
+    })
+
+
+</script>
+</html>

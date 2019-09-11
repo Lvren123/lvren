@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>商品后台管理</title>
+	<link rel="stylesheet" type="text/css" href="../../static/admin/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="../../static/admin/css/main.css">
+	<link rel="stylesheet" type="text/css" href='../../static/admin/css/jquery.pagination.css'>
+	<script type="text/javascript" src="../../static/admin/js/jquery-1.12.4.min.js"></script>
+	<script src="../../static/admin/js/jquery.pagination.min.js"></script>
+
+</head>
+<body>
+	<div class="breadcrub">
+			当前位置：产品管理>商品管理
+		</div>
+		<div class="pannel">
+			<table class="common_table">
+
+			</table>
+		</div>
+		<div id="pagination">
+
+		</div>
+</body>
+<script>
+  getCatelist(1);
+    function getCatelist(p) {
+        $.ajax({
+            url:'/sadmin/shoplist/',
+            type:'get',
+            data:{'p':p},
+            dataType:'json',
+            success:function (res) {
+                if (res.code == 200){
+                    var mes = res.message
+                    var lenght = mes.length
+                    var html = '<tr><td colspan="4"><a href="/sadmin/addshop/" class="addtype">增加分类</a></td>\\n\' +\n' +
+                    '                        \'                </tr><tr><th width="10%">id</th><th width="50%">类别名称</th><th width="20%">价格</th><th width="20%">管理操作</th></tr>'
+                    for (var i=0;i<lenght;i++){
+                        html+=' <tr><td width="10%">'+mes[i]['id']+'</td><td width="50%">'+mes[i]['name']+'</td><td width="20%">'+mes[i]['price']+'</td> '+
+                        '<td width="20%"><a href="/sadmin/addshop/?id='+mes[i]['id']+'">修改</a>        <a href="javascript:del('+mes[i]['id']+')">删除</a></td></tr>'
+                    }$('.common_table').html(html)
+                    page(res.cpage,res.tpage)
+                }
+            }
+        })
+    }
+    function page(cpage,tpage) {
+        $('#pagination').pagination({
+            currentPage:cpage,
+            totalPage:tpage,
+            callback:function (cur) {
+                getCatelist(cur)
+            }
+        })
+
+    }
+    //删除
+    function del(id) {
+        if (id){
+            $.ajax({
+                url:'/sadmin/delgood/',
+                type:'get',
+                dataType:'json',
+                data: {'id':id},
+                success:function (res) {
+                    if (res.code == 200){
+                        window.location.reload()
+                    }else {
+                        alert('删除失败，请重试！')
+                    }
+                }
+            })
+        }
+    }
+</script>
+</html>

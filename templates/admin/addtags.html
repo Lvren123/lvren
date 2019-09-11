@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>标签后台管理</title>
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/main.css">
+    <script type="text/javascript" src="../../static/admin/js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+    <div class="breadcrub">
+            当前位置：标签管理>添加标签
+        </div>
+        <div class="pannel">
+            <div class="news_review">
+
+            <h3 class="review_title">添加标签</h3>
+                <form enctype="multipart/form-data">
+            <div class="form_group">
+                <label>名称：</label>
+                <input type="text" name="name" class="input_txt2" value="{{ one_tags.name }}" width=100>
+            </div>
+                    <div class="form_group">
+                <label>是否推送：</label>
+                <input type="radio" name="is_recommend"  value=1 width=100 checked>是
+                <input type="radio" name="is_recommend"  value=0 width=100>否
+            </div>
+                 <div class="form_group">
+                <label>分类标签：</label>
+                     <select name="cid">
+                         {% for x in cate %}
+                         <option value="{{ x.id }}">{{ x.name }}</option>
+                         {% endfor %}
+                     </select>
+            </div>
+                    <input type="text" name="id" value="{{ id }}">
+            <div class="form_group indent_group line_top">
+                <input type="button" value="确定" class="confirm" onclick='addcate()'>
+                <input type="button" value="取消" class="cancel" onclick="cancel()">
+            </div>
+                    </form>
+
+        </div>
+        </div>
+
+
+</body>
+<script>
+    function addcate() {
+        $.ajax({
+            url:'/sadmin/addtags/',
+            type:'post',
+            data:$('form').serialize(),
+            dataType:'json',
+            success:function (res) {
+                if(res.code == 200){
+                    window.location.href = '/sadmin/tags/'
+                }else{
+                    alert(res.message)
+                }
+            }
+        })
+    }
+</script>
+</html>

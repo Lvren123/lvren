@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台用户管理</title>
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/main.css">
+    <script type="text/javascript" src="../../static/admin/js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+    <div class="breadcrub">
+            当前位置：权限管理>添加用户
+        </div>
+        <div class="pannel">
+            <div class="news_review">
+
+            <h3 class="review_title">添加用户</h3>
+                <form enctype="multipart/form-data">
+            <div class="form_group">
+                <label>账号：</label>
+
+                <input type="text" name="username" class="input_txt2" value="{{ sadmin.username }}" width=100>
+            </div>
+                 <div class="form_group">
+                <label>密码：</label>
+
+                <input type="password" name="passwd" class="input_txt2" value="" width=100>
+            </div>
+           <div class="form_group">
+                <label>超级管理员：</label>
+
+                <input type="radio" name="is_admin" value=1 checked>启用
+                <input type="radio" name="is_admin" value=0>停用
+            </div>
+                    <div class="form_group">
+                <label>可用资源：</label>
+                        <select name="rid" id="">
+                            {% for i in role %}
+                            <option  value="{{ i.id }}">{{ i.name }}</option>
+                            {% endfor %}
+                        </select>
+
+            </div>
+                    <input  name="id" type="text" value="{{ id }}">
+            <div class="form_group indent_group line_top">
+                <input type="button" value="确定" class="confirm" onclick='addcate()'>
+                <input type="button" value="取消" class="cancel" onclick="cancel()">
+            </div></form>
+        </div>
+        </div>
+
+
+</body>
+<script>
+function addcate(){
+        //发起ajax请求
+        $.ajax({
+            url:'/sadmin/addauser/',
+            type:'post',
+            data:$('form').serialize(),
+            dataType:'json',
+            success:function(res){
+                if(res.code == 200){
+                    window.location.href="/sadmin/auser/"
+
+                }else{
+                    alert('添加失败')
+                }
+            }
+        })
+    }
+</script>
+</html>
